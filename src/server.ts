@@ -1,8 +1,11 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import { PDFGeneratorProvider } from "./provider/pdf-generator-provider";
+import pino from "pino"
 
 const PDFGenerator = new PDFGeneratorProvider()
+
+const logger = pino({ level: "info" })
 
 const app = express()
 
@@ -21,7 +24,7 @@ type RequestQueryPdf = {
 }
 
 
-const version = "0.0.1"
+const version = "0.0.2"
 app.get("/health", (req: Request, res: Response) => {
     res.json({ message: "Funcionando com sucesso.", version: version })
 })
@@ -34,17 +37,27 @@ app.get("/", (req: Request, res: Response) => {
 
 
 app.get("/pdf", async (req: Request, res: Response) => {
-    const params: RequestQueryPdf = {
-        ...DefaultRequestQueryPdf,
-        ...req.query
+    try {
+        const params: RequestQueryPdf = {
+            ...DefaultRequestQueryPdf,
+            ...req.query
+        }
+        logger.info("Gerando HTML")
+        const html = PDFGenerator.renderHTML("documento.hbs", { nome: "ANDRE" })
+
+        logger.info("Gerando PDF")
+        const pdf = await PDFGenerator.createPDF(html)
+
+        logger.info("Retornando PDF")
+        res.contentType("application/pdf")
+        if (params.type === "download") {
+            res.attachment(params?.filename ? `${params?.filename}.pdf` : `${params?.id}.pdf`)
+        }
+        res.send(pdf)
+    } catch (err) {
+        console.log(err)
+        logger.info(err)
     }
-    const html = PDFGenerator.renderHTML("documento.hbs", { nome: "ANDRE" })
-    const pdf = await PDFGenerator.createPDF(html)
-    res.contentType("application/pdf")
-    if (params.type === "download") {
-        res.attachment(params?.filename ? `${params?.filename}.pdf` : `${params?.id}.pdf`)
-    }
-    res.send(pdf)
 })
 
 
