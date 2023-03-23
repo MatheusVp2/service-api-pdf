@@ -34,11 +34,6 @@ export class PDFGeneratorProvider {
                 "--single-process",
                 "--no-zygote",
                 '--hide-scrollbars',
-                '--mute-audio',
-                '--no-first-run',
-                '--disable-infobars',
-                '--disable-breakpad',
-                '--window-size=1280,1024',
             ],
             executablePath:
                 process.env.NODE_ENV === "production"
