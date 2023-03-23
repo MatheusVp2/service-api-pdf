@@ -25,7 +25,7 @@ app.get("/health", (req: Request, res: Response) => {
 })
 
 app.get("/", (req: Request, res: Response) => {
-    res.json({ message: "Funcionando com sucesso." })
+    res.json({ message: "Funcionando com sucesso. Alterado" })
 })
 
 
