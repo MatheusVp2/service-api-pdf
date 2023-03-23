@@ -24,7 +24,7 @@ type RequestQueryPdf = {
 }
 
 
-const version = "0.0.2"
+const version = "0.0.3"
 app.get("/health", (req: Request, res: Response) => {
     res.json({ message: "Funcionando com sucesso.", version: version })
 })
@@ -44,6 +44,7 @@ app.get("/pdf", async (req: Request, res: Response) => {
         }
         logger.info("Gerando HTML")
         const html = PDFGenerator.renderHTML("documento.hbs", { nome: "ANDRE" })
+
 
         logger.info("Gerando PDF")
         const pdf = await PDFGenerator.createPDF(html)

@@ -81,6 +81,7 @@ export class PDFGeneratorProvider {
         const options = await this.getOptions()
         const browser = await puppeteer.launch(options)
         const page = await browser.newPage()
+        page.setDefaultNavigationTimeout(0);
         await page.setContent(html)
         return await page.pdf({ format: "a4" })
     }
