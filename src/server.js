@@ -17,7 +17,7 @@ const DefaultRequestQueryPdf = {
     type: "view"
 }
 
-const version = "0.1.0"
+const version = "1.0.0"
 app.get("/health", (req, res) => {
     res.json({ message: "Funcionando com sucesso.", version: version })
 })
@@ -30,28 +30,17 @@ app.get("/",  (req, res) => {
 
 
 app.get("/pdf", async  (req, res) => {
-    try {
-        const params = {
-            ...DefaultRequestQueryPdf,
-            ...req.query
-        }
-        logger.info("Gerando HTML")
-        const html = PDFGenerator.renderHTML("documento.hbs", { nome: "ANDRE" })
-
-
-        logger.info("Gerando PDF")
-        const pdf = await PDFGenerator.createPDF(html)
-
-        logger.info("Retornando PDF")
-        res.contentType("application/pdf")
-        if (params.type === "download") {
-            res.attachment(params?.filename ? `${params?.filename}.pdf` : `${params?.id}.pdf`)
-        }
-        res.send(pdf)
-    } catch (err) {
-        console.log(err)
-        logger.info(err)
+    const params = {
+        ...DefaultRequestQueryPdf,
+        ...req.query
     }
+    const html = PDFGenerator.renderHTML("documento.hbs", { nome: "ANDRE" })
+    const pdf = await PDFGenerator.createPDF(html)
+    res.contentType("application/pdf")
+    if (params.type === "download") {
+        res.attachment(params?.filename ? `${params?.filename}.pdf` : `${params?.id}.pdf`)
+    }
+    res.send(pdf)
 })
 
 

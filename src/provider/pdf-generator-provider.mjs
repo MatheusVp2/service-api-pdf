@@ -18,7 +18,7 @@ export class PDFGeneratorProvider {
 
     initialize() {
         const __filename = fileURLToPath(import.meta.url);
-        const __dirname = path.dirname(__filename);
+    const __dirname = path.dirname(__filename);
         this.props = {
             templatePath: path.join(__dirname, "..", "templates", "pdf")
         }
@@ -51,14 +51,12 @@ export class PDFGeneratorProvider {
     }
 
     async createPDF(html){
-        logger.info("Gerando Browser")
         const browser = await this.getBrowser()
-        logger.info("Gerando Page")
         const page = await browser.newPage()
-        logger.info("Gerando Page Html")
         await page.setContent(html)
-        logger.info("Gerando PDF Buffer")
-        return await page.pdf({ format: "a4" })
+        let bufferPdf = await page.pdf({ format: "a4" })
+        await browser.close();
+        return bufferPdf
     }
 
 }
