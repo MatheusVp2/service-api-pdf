@@ -20,6 +20,15 @@ type RequestQueryPdf = {
     filename?: string
 }
 
+app.get("/health", (req: Request, res: Response) => {
+    res.json({ message: "Funcionando com sucesso." })
+})
+
+app.get("/", (req: Request, res: Response) => {
+    res.json({ message: "Funcionando com sucesso." })
+})
+
+
 app.get("/pdf", async (req: Request, res: Response) => {
     const params: RequestQueryPdf = {
         ...DefaultRequestQueryPdf,
