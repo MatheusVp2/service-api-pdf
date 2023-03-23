@@ -52,10 +52,11 @@ export class PDFGeneratorProvider {
 
         if (!isDev) {
             return {
-                args: chrome.args,
-                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+                defaultViewport: chrome.defaultViewport,
                 executablePath: await chrome.executablePath,
-                headless: chrome.headless
+                headless: true,
+                ignoreHTTPSErrors: true,
             }
         }
 
@@ -65,6 +66,16 @@ export class PDFGeneratorProvider {
             executablePath: exePath,
             headless: true
         }
+    }
+
+    private async getBrowser() {
+        return await chrome.puppeteer.launch({
+            args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+            defaultViewport: chrome.defaultViewport,
+            executablePath: await chrome.executablePath,
+            headless: chrome.headless,
+            ignoreHTTPSErrors: true,
+        });
     }
 
     public renderHbsHTML(html: string, data: any) {
@@ -80,9 +91,9 @@ export class PDFGeneratorProvider {
 
     public async createPDF(html: string): Promise<Buffer> {
         logger.info("Gerando Options")
-        const options = await this.getOptions()
+        // const options = await this.getOptions()
         logger.info("Gerando Browser")
-        const browser = await puppeteer.launch(options)
+        const browser = await this.getBrowser()
         logger.info("Gerando Page")
         const page = await browser.newPage()
         logger.info("Gerando Timeout")
