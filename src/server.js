@@ -17,7 +17,7 @@ const DefaultRequestQueryPdf = {
     type: "view"
 }
 
-const version = "1.0.0"
+const version = "1.0.1"
 app.get("/health", (req, res) => {
     res.json({ message: "Funcionando com sucesso.", version: version })
 })

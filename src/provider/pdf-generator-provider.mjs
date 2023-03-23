@@ -26,11 +26,25 @@ export class PDFGeneratorProvider {
 
     async getBrowser() {
         return await puppeteer.launch({
+            devtools: false,
+            ignoreDefaultArgs: true,
             args: [
                 "--disable-setuid-sandbox",
                 "--no-sandbox",
                 "--single-process",
                 "--no-zygote",
+                '--disable-canvas-aa',
+                '--disable-2d-canvas-clip-aa',
+                '--disable-gl-drawing-for-tests',
+                '--disable-dev-shm-usage',
+                '--use-gl=swiftshader',
+                '--enable-webgl',
+                '--hide-scrollbars',
+                '--mute-audio',
+                '--no-first-run',
+                '--disable-infobars',
+                '--disable-breakpad',
+                '--window-size=1280,1024',
             ],
             executablePath:
                 process.env.NODE_ENV === "production"
