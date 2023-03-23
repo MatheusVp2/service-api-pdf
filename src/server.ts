@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import { PDFGeneratorProvider } from "./provider/pdf-generator-provider";
-import pino from "pino"
+import { logger } from "./helpers/logger";
+
 
 const PDFGenerator = new PDFGeneratorProvider()
 
-const logger = pino({ level: "info" })
 
 const app = express()
 
@@ -24,7 +24,7 @@ type RequestQueryPdf = {
 }
 
 
-const version = "0.0.3"
+const version = "0.0.4"
 app.get("/health", (req: Request, res: Response) => {
     res.json({ message: "Funcionando com sucesso.", version: version })
 })

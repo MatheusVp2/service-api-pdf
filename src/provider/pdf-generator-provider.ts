@@ -5,6 +5,7 @@ import hbs from "handlebars"
 
 import chrome from 'chrome-aws-lambda'
 import puppeteer from "puppeteer-core"
+import { logger } from "../helpers/logger"
 
 
 type PDFGeneratorProviderProps = {
@@ -78,11 +79,17 @@ export class PDFGeneratorProvider {
     }
 
     public async createPDF(html: string): Promise<Buffer> {
+        logger.info("Gerando Options")
         const options = await this.getOptions()
+        logger.info("Gerando Browser")
         const browser = await puppeteer.launch(options)
+        logger.info("Gerando Page")
         const page = await browser.newPage()
+        logger.info("Gerando Timeout")
         page.setDefaultNavigationTimeout(0);
+        logger.info("Gerando Page Html")
         await page.setContent(html)
+        logger.info("Gerando PDF Buffer")
         return await page.pdf({ format: "a4" })
     }
 
