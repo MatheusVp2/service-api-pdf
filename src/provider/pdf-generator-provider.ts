@@ -38,6 +38,25 @@ export class PDFGeneratorProvider {
         return options
     }
 
+    private async getBrowser() {
+        const isDev = !process.env.AWS_REGION
+        if (!isDev) {
+            let options = {
+                args: chrome.args,
+                executablePath: await chrome.executablePath,
+                headless: chrome.headless
+            }
+            return await chrome.puppeteer.launch({
+                args: chrome.args,
+                defaultViewport: chrome.defaultViewport,
+                executablePath: await chrome.executablePath,
+                headless: chrome.headless,
+                ignoreHTTPSErrors: true,
+            });
+        }
+        return await puppeteer.launch()
+    }
+
     public renderHbsHTML(html: string, data: any) {
         var template = hbs.compile(html);
         return template(data);
@@ -50,8 +69,7 @@ export class PDFGeneratorProvider {
     }
 
     public async createPDF(html: string): Promise<Buffer> {
-        const options = await this.getOptionsBrowser()
-        const browser = await puppeteer.launch(options)
+        const browser = await this.getBrowser()
         const page = await browser.newPage()
         await page.setContent(html)
         return await page.pdf({ format: "a4" })
