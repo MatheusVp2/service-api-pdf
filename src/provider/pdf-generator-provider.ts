@@ -52,7 +52,10 @@ export class PDFGeneratorProvider {
 
         if (!isDev) {
             return {
-                args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+                args: [...chrome.args, "--hide-scrollbars", "--disable-web-security", "--disable-setuid-sandbox",
+                    "--no-sandbox",
+                    "--single-process",
+                    "--no-zygote",],
                 defaultViewport: chrome.defaultViewport,
                 executablePath: await chrome.executablePath,
                 headless: true,
