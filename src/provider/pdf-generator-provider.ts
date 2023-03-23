@@ -4,7 +4,7 @@ import path from "node:path"
 import hbs from "handlebars"
 
 import chrome from 'chrome-aws-lambda'
-import puppeteer from "puppeteer"
+import puppeteer from "puppeteer-core"
 
 
 type PDFGeneratorProviderProps = {
@@ -38,23 +38,30 @@ export class PDFGeneratorProvider {
         return options
     }
 
-    private async getBrowser() {
+    private async getOptions() {
         const isDev = !process.env.AWS_REGION
+
+        const chromeExecPaths = {
+            win32: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+            linux: '/usr/bin/google-chrome',
+            darwin: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+        }
+
+        const exePath = chromeExecPaths[process.platform]
+
         if (!isDev) {
-            let options = {
+            return {
                 args: chrome.args,
                 executablePath: await chrome.executablePath,
                 headless: chrome.headless
             }
-            return await chrome.puppeteer.launch({
-                args: chrome.args,
-                defaultViewport: chrome.defaultViewport,
-                executablePath: await chrome.executablePath,
-                headless: chrome.headless,
-                ignoreHTTPSErrors: true,
-            });
         }
-        return await puppeteer.launch()
+
+        return {
+            args: [],
+            executablePath: exePath,
+            headless: true
+        }
     }
 
     public renderHbsHTML(html: string, data: any) {
@@ -69,7 +76,8 @@ export class PDFGeneratorProvider {
     }
 
     public async createPDF(html: string): Promise<Buffer> {
-        const browser = await this.getBrowser()
+        const options = await this.getOptions()
+        const browser = await puppeteer.launch(options)
         const page = await browser.newPage()
         await page.setContent(html)
         return await page.pdf({ format: "a4" })

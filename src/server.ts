@@ -34,7 +34,7 @@ app.get("/pdf", async (req: Request, res: Response) => {
         ...DefaultRequestQueryPdf,
         ...req.query
     }
-    const html = PDFGenerator.renderHTML("documento.hbs", { nome: "Matheus" })
+    const html = PDFGenerator.renderHTML("documento.hbs", { nome: "ANDRE" })
     const pdf = await PDFGenerator.createPDF(html)
     res.contentType("application/pdf")
     if (params.type === "download") {
