@@ -1,8 +1,9 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
-import { PDFGeneratorProvider } from "./provider/pdf-generator-provider";
-import { logger } from "./helpers/logger";
+import { PDFGeneratorProvider } from "./provider/pdf-generator-provider.mjs";
+import { logger } from "./helpers/logger.mjs";
 
+import "dotenv/config"
 
 const PDFGenerator = new PDFGeneratorProvider()
 
@@ -16,29 +17,21 @@ const DefaultRequestQueryPdf = {
     type: "view"
 }
 
-type RequestQueryPdf = {
-    token?: string
-    id?: string
-    type?: string
-    filename?: string
-}
-
-
-const version = "0.0.6"
-app.get("/health", (req: Request, res: Response) => {
+const version = "0.1.0"
+app.get("/health", (req, res) => {
     res.json({ message: "Funcionando com sucesso.", version: version })
 })
 
 
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/",  (req, res) => {
     res.json({ message: "Funcionando com sucesso.", version: version })
 })
 
 
-app.get("/pdf", async (req: Request, res: Response) => {
+app.get("/pdf", async  (req, res) => {
     try {
-        const params: RequestQueryPdf = {
+        const params = {
             ...DefaultRequestQueryPdf,
             ...req.query
         }
