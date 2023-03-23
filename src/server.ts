@@ -24,7 +24,7 @@ type RequestQueryPdf = {
 }
 
 
-const version = "0.0.5"
+const version = "0.0.6"
 app.get("/health", (req: Request, res: Response) => {
     res.json({ message: "Funcionando com sucesso.", version: version })
 })

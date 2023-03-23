@@ -4,7 +4,11 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "ts-node-dev src/server.ts"
+    "build" : "tsc --outDir public",
+    "start" : "node index.js",
+    "dev": "ts-node-dev src/server.ts --respawn --transpileOnly",
+    "script": "ts-node src/script.ts",
+    "teste": "ts-node src/teste.ts"
   },
   "keywords": [],
   "author": "",
