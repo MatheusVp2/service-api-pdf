@@ -52,6 +52,7 @@ export class PDFGeneratorProvider {
         if (!isDev) {
             return {
                 args: chrome.args,
+                ignoreDefaultArgs: ['--disable-extensions'],
                 executablePath: await chrome.executablePath,
                 headless: chrome.headless
             }
@@ -59,6 +60,7 @@ export class PDFGeneratorProvider {
 
         return {
             args: [],
+            ignoreDefaultArgs: ['--disable-extensions'],
             executablePath: exePath,
             headless: true
         }
