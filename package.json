@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc --outDir public",
-    "start": "node index.js",
+    "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "script": "ts-node src/script.ts",
     "teste": "ts-node src/teste.ts"
@@ -28,8 +28,5 @@
     "@types/html-pdf": "^3.0.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.2"
-  },
-  "engines": {
-    "node": "^14"
   }
 }
