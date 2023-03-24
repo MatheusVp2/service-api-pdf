@@ -12,7 +12,7 @@ app.use(cors())
 app.use(express.json())
 
 
-const version = "2.0.0"
+const version = "2.0.1"
 
 
 app.get("/health", (req, res) => {

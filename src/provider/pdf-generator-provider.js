@@ -60,7 +60,8 @@ class PuppeteerProvider {
 
     async getBrowser(){
         return await puppeteer.launch({
-            headless: false,
+            ignoreDefaultArgs: ["--disable-extensions"],
+            headless: true,
             args: PERFORMANCE_ARGS,
             executablePath:
                 process.env.NODE_ENV === "production"
