@@ -1,37 +1,41 @@
-import express from "express";
 import cors from "cors";
-import { PDFGeneratorProvider } from "./provider/pdf-generator-provider.mjs";
-import { logger } from "./helpers/logger.mjs";
+import express from "express";
+import { PDFGeneratorProvider } from "./provider/pdf-generator-provider.js";
 
-import "dotenv/config"
+import "dotenv/config";
 
 const PDFGenerator = new PDFGeneratorProvider()
-
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
 
-const DefaultRequestQueryPdf = {
-    type: "view"
-}
 
-const version = "1.0.3"
+const version = "2.0.0"
+
+
 app.get("/health", (req, res) => {
     res.json({ message: "Funcionando com sucesso.", version: version })
 })
 
-
-
-app.get("/",  (req, res) => {
+app.get("/", (req, res) => {
     res.json({ message: "Funcionando com sucesso.", version: version })
 })
 
+app.get("/open-navigator", async (req, res) => {
+    await PDFGenerator.openBrowserAndPage()
+    res.json({ isOpen: PDFGenerator.isBrowserConnected })
+})
 
-app.get("/pdf", async  (req, res) => {
+app.get("/close-navigator", async (req, res) => {
+    await PDFGenerator.closeBrowser()
+    res.json({ isOpen: PDFGenerator.isBrowserConnected })
+})
+
+app.get("/pdf", async (req, res) => {
     const params = {
-        ...DefaultRequestQueryPdf,
+        ...{ type: "view" },
         ...req.query
     }
     const html = PDFGenerator.renderHTML("documento.hbs", { nome: "ANDRE" })

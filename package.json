@@ -5,11 +5,8 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "build": "tsc --outDir public",
     "start": "node src/server.js",
-    "dev": "node --watch src/server.js",
-    "script": "ts-node src/script.ts",
-    "teste": "ts-node src/teste.ts"
+    "dev": "node --watch src/server.js"
   },
   "keywords": [],
   "author": "",
